@@ -361,8 +361,8 @@ class LearningTrack(models.Model):
     student = models.ForeignKey('users.Student')
     """The Student concerned by this LT"""
 
-    learning_track = ArrayField(models.ForeignKey(Skill))
-    """List of Skills in the track"""
+    learning_track = ArrayField(models.ForeignKey(StudentSkill))
+    """List of Student Skills in the track"""
 
     current_skill_index = models.PositiveIntegerField()
     """Index of currently suggested skill"""
@@ -372,3 +372,25 @@ class LearningTrack(models.Model):
 
     cleared = models.BooleanField(default=False)
     """Whether the LT is cleared or not"""
+
+
+class Criteria(models.Model):
+    """[FR] Critère
+
+        A criteria is a value taken into account for the ordering of the Learning Track
+
+    """
+    name = models.CharField(max_length=255)
+
+
+class ProfessorCriterias(models.Model):
+    """[FR] Critères du Professeur
+
+        Criterias chosen by a teacher as important for his/her class.
+
+    """
+    professor = models.ForeignKey('users.Professor')
+    """The Professor who chose these criterias"""
+
+    criterias = ArrayField(models.ForeignKey(Criteria))
+    """List of Criterias"""
