@@ -379,6 +379,17 @@ class Criteria(models.Model):
 
     """
     name = models.CharField(max_length=255)
+
+class ProfessorCriteria(models.Model):
+    """
+    The order to "walk" on the learning track
+    """
+
+    professor = models.ForeignKey('users.Professor', default=None, blank=True)
+
+    criteria = models.ForeignKey('Criteria')
+
+    order = models.PositiveIntegerField()
     
 
 

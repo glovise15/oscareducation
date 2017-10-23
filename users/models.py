@@ -20,7 +20,7 @@ class Professor(models.Model):
     user = models.OneToOneField(User)
     is_pending = models.BooleanField(default=True)
     code = models.BigIntegerField(null=True, blank=True)
-    criterias = models.ManyToManyField('skills.Criteria', related_name="ordering_criteria+")
+    criterias = models.ManyToManyField('skills.Criteria', through="skills.ProfessorCriteria")
 
     def __unicode__(self):
         return ("%s %s" % (
