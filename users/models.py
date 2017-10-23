@@ -6,6 +6,8 @@ import random
 from django.db.models import Count
 from django.contrib.auth.models import User
 
+from skills.models import StudentSkill
+
 
 class AuthUserManager(models.Manager):
     def get_queryset(self):
@@ -17,12 +19,40 @@ class Professor(models.Model):
     objects = AuthUserManager()
     user = models.OneToOneField(User)
     is_pending = models.BooleanField(default=True)
-    code = models.BigIntegerField(null=True,blank=True)
+    code = models.BigIntegerField(null=True, blank=True)
     criterias = models.ManyToManyField('skills.Criteria', related_name="ordering_criteria+")
 
     def __unicode__(self):
         return ("%s %s" % (
         self.user.first_name, self.user.last_name)) if self.user.first_name or self.user.last_name else self.user.username
+
+    def assign_targets(self, student, target_skills):
+        """ Assign target skills to the student
+
+            Set the is_target flag on matching student skills.
+            If there is none, then a student skill is created for the target and for each prerequisite skill.
+        """
+        student_skills = StudentSkill.objects.filter(student=student)
+        for target_skill in target_skills:
+            found = False
+            for student_skill in student_skills:
+                if student_skill.skill == target_skill:
+                    student_skill.is_target = True
+                    student_skill.save()
+                    found = True
+                    break
+            if not found:
+                StudentSkill.objects.create(
+                    student=student,
+                    skill=target_skill,
+                    is_target=True
+                )
+                for prerequisite in target_skill.skill.get_prerequisites_skills():
+                    if prerequisite not in student_skills:
+                        StudentSkill.objects.create(
+                            student=student,
+                            skill=prerequisite,
+                        )
 
     class Meta:
         ordering = ['user__last_name', 'user__first_name']
