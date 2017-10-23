@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.contrib import admin
-from .models import Skill, CodeR, Relations, CodeR_relations, Section
+from .models import Skill, CodeR, Relations, CodeR_relations, Section, Criteria
 
 class SkillAdmin(admin.ModelAdmin):
     exclude = ('resource',)
@@ -28,3 +28,8 @@ admin.site.register(CodeR_relations, CodeR_relationsAdmin)
 admin.site.register(Section, SectionAdmin)
 
 # Register your models here.
+
+class CriteriaAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(Criteria, CriteriaAdmin)
