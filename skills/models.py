@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from examinations.models import Context
+from django.contrib.postgres.fields import ArrayField
 
 class Skill(models.Model):
     """[FR] Compétence
@@ -226,6 +227,8 @@ class StudentSkill(models.Model):
     """When the Skill was tested"""
     acquired = models.DateTimeField(default=None, null=True)
     """When the Skill was acquired"""
+    is_target = models.BooleanField(default=False)
+    """Whether the Skill is targeted by this student or not"""
     # bad: doesn't support regression
 
     def __unicode__(self):
@@ -344,3 +347,28 @@ class StudentSkill(models.Model):
                 return False
 
         return True
+
+
+class LearningTrack(models.Model):
+    """[FR] Chemin d'apprentissage
+
+        A learning track is an ordered sequence of skills the student should learn.
+
+    """
+    object_id = models.PositiveIntegerField()
+    """ID of this Learning Track"""
+
+    student = models.ForeignKey('users.Student')
+    """The Student concerned by this LT"""
+
+    learning_track = ArrayField(models.ForeignKey(Skill))
+    """List of Skills in the track"""
+
+    current_skill_index = models.PositiveIntegerField()
+    """Index of currently suggested skill"""
+
+    locked = models.BooleanField(default=False)
+    """Whether the LT is locked or not"""
+
+    cleared = models.BooleanField(default=False)
+    """Whether the LT is cleared or not"""
