@@ -36,6 +36,7 @@ class Student(models.Model):
     is_pending = models.BooleanField(default=True)
     code = models.IntegerField(null=True, blank=True)
     code_created_at = models.DateTimeField(auto_now=True)
+    #learning_track = models.ManyToManyField('skills.StudentSkill', through="skills.LearningTrack")
 
     def __unicode__(self):
         return ("%s %s" % (

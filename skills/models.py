@@ -349,30 +349,28 @@ class StudentSkill(models.Model):
         return True
 
 
+
 class LearningTrack(models.Model):
     """[FR] Chemin d'apprentissage
 
         A learning track is an ordered sequence of skills the student should learn.
 
     """
-    object_id = models.PositiveIntegerField()
-    """ID of this Learning Track"""
 
     student = models.ForeignKey('users.Student')
     """The Student concerned by this LT"""
 
-    #learning_track = ArrayField(models.ForeignKey(StudentSkill))
-    """List of Student Skills in the track"""
+    studentskill = models.ForeignKey('StudentSkill')
 
-    current_skill_index = models.PositiveIntegerField()
-    """Index of currently suggested skill"""
+
+    order = models.PositiveIntegerField()
+    """order of the skill in the learning track"""
 
     locked = models.BooleanField(default=False)
     """Whether the LT is locked or not"""
 
     cleared = models.BooleanField(default=False)
     """Whether the LT is cleared or not"""
-
 
 class Criteria(models.Model):
     """[FR] Critère
@@ -381,6 +379,7 @@ class Criteria(models.Model):
 
     """
     name = models.CharField(max_length=255)
+    
 
 
 
