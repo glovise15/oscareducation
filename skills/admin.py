@@ -35,6 +35,6 @@ class CriteriaAdmin(admin.ModelAdmin):
 admin.site.register(Criteria, CriteriaAdmin)
 
 class ProfessorCriteriaAdmin(admin.ModelAdmin):
-    pass
+    ordering = ('professor', 'order')
 
 admin.site.register(ProfessorCriteria, ProfessorCriteriaAdmin)

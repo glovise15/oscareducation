@@ -394,8 +394,12 @@ class ProfessorCriteria(models.Model):
 
     order = models.PositiveIntegerField()
 
-    
-    
+    def __unicode__(self):
+        if self.professor and self.professor.user:
+            return str(self.professor) + " - " + str(self.order) + " : " + self.criteria.name
+
+        return "all - " + str(self.order) + " : " + self.criteria.name
+
 
 
 
